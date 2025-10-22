@@ -21,7 +21,6 @@
       "@modules/*": ["./src/modules/*"],
       "@infra/*": ["src/infra/*"],
       "@protocols/*": ["./src/protocols/*"],
-      "@utils/*": ["./src/common/utils/*"],
     },
   }
 }

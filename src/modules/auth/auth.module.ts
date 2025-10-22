@@ -5,7 +5,7 @@ import { AuthController } from './auth.controller'
 
 import { UsersModule } from '@modules/users/users.module'
 import { Crypt } from '@protocols/crypt'
-import { CryptService } from '@utils/CryptService'
+import { CryptService } from '@infra/utils/CryptService'
 
 @Module({
   imports: [UsersModule],

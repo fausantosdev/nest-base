@@ -8,7 +8,7 @@ import { UsersController } from './users.controller'
 import { UserRepository as Repository } from '@modules/users/repository/user.repository'
 import { UserRepository } from '@infra/database/prisma/repositories/user-repository'
 import { Crypt } from '@protocols/crypt'
-import { CryptService } from '@utils/CryptService'
+import { CryptService } from '@infra/utils/CryptService'
 
 @Module({
   controllers: [UsersController],
