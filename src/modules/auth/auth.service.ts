@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config'
 
 import { SignInDto } from './dto/sign-in.dto'
 
-import { UsersService } from '@modules/users/users.service'
+import { GetUserUseCase } from '@modules/users/use-cases/get-user.usecase'
 import { AuthResponseDto } from './dto/auth-response.dto'
 import { Crypt } from '@protocols/crypt'
 import { User } from '@modules/users/entities/user.entity'
@@ -12,7 +12,7 @@ import { User } from '@modules/users/entities/user.entity'
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UsersService,
+    private readonly getUser: GetUserUseCase,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly cryptService: Crypt
@@ -21,7 +21,7 @@ export class AuthService {
   async signIn(signIn: SignInDto): Promise<AuthResponseDto> {
     const { email, password } = signIn
 
-    const userExists = (await this.userService.findOne({ email })) as User
+    const userExists = (await this.getUser.handle({ email })) as User
 
     if (
       !userExists ||
@@ -47,7 +47,7 @@ export class AuthService {
 
     const { sub } = decodedToken as { sub: string; email: string }
 
-    const user = (await this.userService.findOne({ id: sub })) as User
+    const user = (await this.getUser.handle({ id: sub })) as User
 
     if (!user) throw new UnauthorizedException()
 
