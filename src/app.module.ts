@@ -1,14 +1,17 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup'
 
 import { UsersModule } from '@modules/users/users.module'
 import { AuthModule } from '@modules/auth/auth.module'
 import { WalletsModule } from './modules/wallets/wallets.module'
 import { validate } from './config/env.validation'
 import { JwtModule } from '@nestjs/jwt'
+import { APP_FILTER } from '@nestjs/core'
 
 @Module({
   imports: [
+    SentryModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       validate,
@@ -29,6 +32,11 @@ import { JwtModule } from '@nestjs/jwt'
     WalletsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: SentryGlobalFilter,
+    },
+  ],
 })
 export class AppModule {}
