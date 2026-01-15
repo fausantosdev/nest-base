@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common'
 
-import { SignInUseCase } from './use-cases/sign-in.use-case'
-import { RefreshTokenUseCase } from './use-cases/refresh-token.use-case'
+import { SignInUseCase } from './use-cases/sign-in.usecase'
+import { RefreshTokenUseCase } from './use-cases/refresh-token.usecase'
 
 import { response } from 'src/common/helpers/response-helper'
 import { AuthGuard } from 'src/guards/auth.guard'
