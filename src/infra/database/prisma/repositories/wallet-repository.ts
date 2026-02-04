@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import { Prisma, Wallet } from '../../../../../prisma/generated/client'
+import { Prisma, Wallet } from '../generated/client'
 
 import { PrismaService } from '../prisma.service'
 import { Repository } from '@protocols/repository'

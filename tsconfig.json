@@ -20,7 +20,7 @@
     "paths": {
       "@config/*": ["./src/config/*"],
       "@modules/*": ["./src/modules/*"],
-      "@infra/*": ["src/infra/*"],
+      "@infra/*": ["./src/infra/*"],
       "@protocols/*": ["./src/protocols/*"],
     },
   }
