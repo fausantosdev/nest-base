@@ -1,12 +1,10 @@
-import { IsEmail, IsJWT, IsNotEmpty, Length } from 'class-validator'
+import { IsEmail, IsHash, IsNotEmpty, Length } from 'class-validator'
 
 export class ResetPasswordDto {
   @IsNotEmpty({
     message: 'Token is required',
   })
-  @IsJWT({
-    message: 'Token must be a valid token',
-  })
+  @IsHash('sha1')
   token: string
 
   @IsNotEmpty({
