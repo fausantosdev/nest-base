@@ -1,6 +1,13 @@
-type Response = {
+import { ApiProperty } from '@nestjs/swagger'
+
+class ResponseDto {
+  @ApiProperty({ example: true })
   status?: boolean
+
+  @ApiProperty({ example: 'your-response-data' })
   data?: any
+
+  @ApiProperty({ example: null })
   message?: string
 }
 
@@ -8,7 +15,7 @@ function response({
   status = true,
   data = null,
   message = '',
-}: Response): Response {
+}: ResponseDto): ResponseDto {
   return {
     status,
     data,
@@ -16,4 +23,4 @@ function response({
   }
 }
 
-export { response, Response }
+export { response, ResponseDto }
