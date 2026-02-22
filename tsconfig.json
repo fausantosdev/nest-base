@@ -21,6 +21,8 @@
       "@config/*": ["./src/config/*"],
       "@modules/*": ["./src/modules/*"],
       "@infra/*": ["./src/infra/*"],
+      "@guards/*": ["./src/guards/*"],
+      "@common/*": ["./src/common/*"],
       "@protocols/*": ["./src/protocols/*"],
     },
   }
