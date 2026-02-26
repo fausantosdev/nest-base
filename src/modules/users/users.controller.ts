@@ -9,15 +9,8 @@ import {
   Put,
   Request,
 } from '@nestjs/common'
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger'
 
-import { response, ResponseDto } from '@common/helpers/response-helper'
+import { response } from '@common/helpers/response-helper'
 import { AuthGuard } from '@guards/auth.guard'
 
 import { CreateUserDto } from './dto/create-user.dto'
@@ -29,7 +22,15 @@ import { GetUsersUseCase } from './use-cases/get-users.usecase'
 import { UpdateUserUseCase } from './use-cases/update-user.usecase'
 import { DeleteUserUseCase } from './use-cases/delete-user.usecase'
 
-@ApiTags('Users')
+import {
+  ApiCreateUser,
+  ApiDeleteUser,
+  ApiGetUser,
+  ApiGetUsers,
+  ApiProfileUser,
+  ApiUpdateUser,
+} from './user.swagger'
+
 @Controller('/users')
 export class UsersController {
   constructor(
@@ -40,8 +41,7 @@ export class UsersController {
     private readonly deleteUser: DeleteUserUseCase
   ) {}
 
-  @ApiOperation({ summary: 'Create user' })
-  @ApiResponse({ type: ResponseDto })
+  @ApiCreateUser()
   @Post()
   async create(@Body() data: CreateUserDto) {
     const result = await this.createUser.handle(data)
@@ -51,9 +51,7 @@ export class UsersController {
     })
   }
 
-  @ApiOperation({ summary: 'Get user profile data' })
-  @ApiBearerAuth()
-  @ApiResponse({ type: ResponseDto })
+  @ApiProfileUser()
   @Get('me')
   @UseGuards(AuthGuard)
   async profile(@Request() request: Express.Request) {
@@ -66,9 +64,7 @@ export class UsersController {
     })
   }
 
-  @ApiOperation({ summary: 'Get users' })
-  @ApiBearerAuth()
-  @ApiResponse({ type: ResponseDto })
+  @ApiGetUsers()
   @Get()
   @UseGuards(AuthGuard)
   async findAll() {
@@ -79,9 +75,7 @@ export class UsersController {
     })
   }
 
-  @ApiOperation({ summary: 'Get user' })
-  @ApiBearerAuth()
-  @ApiResponse({ type: ResponseDto })
+  @ApiGetUser()
   @Get(':id')
   @UseGuards(AuthGuard)
   async findOne(@Param('id') id: string) {
@@ -92,10 +86,7 @@ export class UsersController {
     })
   }
 
-  @ApiOperation({ summary: 'Update user' })
-  @ApiBearerAuth()
-  @ApiParam({ name: 'id', example: '6c445512-6f80-44b2-a069-bd4a7b0e9f68' })
-  @ApiResponse({ type: ResponseDto })
+  @ApiUpdateUser()
   @Put(':id')
   @UseGuards(AuthGuard)
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -106,10 +97,7 @@ export class UsersController {
     })
   }
 
-  @ApiOperation({ summary: 'Delete user' })
-  @ApiBearerAuth()
-  @ApiParam({ name: 'id', example: '6c445512-6f80-44b2-a069-bd4a7b0e9f68' })
-  @ApiResponse({ type: ResponseDto })
+  @ApiDeleteUser()
   @Delete(':id')
   @UseGuards(AuthGuard)
   async remove(@Param('id') id: string) {
