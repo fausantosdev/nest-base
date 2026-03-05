@@ -8,6 +8,9 @@ enum Environment {
 }
 
 class EnvironmentVariables {
+  @IsString()
+  APP_KEY: string
+
   @IsEnum(Environment)
   NODE_ENV: Environment = Environment.Development
 
@@ -22,6 +25,9 @@ class EnvironmentVariables {
 
   @IsString()
   DATABASE_URL: string
+
+  @IsNumber()
+  BCRYPT_SALT: number = 10
 }
 
 function validate(config: Record<string, unknown>) {

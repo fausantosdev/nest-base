@@ -31,7 +31,7 @@ export class ResetPasswordUseCase {
     if (now > user.password_reset_expires)
       throw new UnauthorizedException('Token expired, request a new one')
 
-    const newPasswordHash = await this.crypt.hash(newPassword, 8)
+    const newPasswordHash = await this.crypt.hash(newPassword)
 
     const updated = await this.userRepository.update(
       { id: user.id },

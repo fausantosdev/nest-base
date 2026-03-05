@@ -23,7 +23,7 @@ export class CreateUserUseCase {
       name,
       date_of_birth,
       email,
-      password_hash: await this.cryptService.hash(password_hash, 8),
+      password_hash: await this.cryptService.hash(password_hash),
     })
 
     return user
