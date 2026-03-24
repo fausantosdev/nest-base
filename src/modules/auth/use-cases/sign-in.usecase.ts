@@ -3,17 +3,15 @@ import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 
 import { SignInDto } from '../dto/sign-in.dto'
-
-import { GetUserUseCase } from '@modules/users/use-cases/get-user.usecase'
-
 import { AuthResponseDto } from '../dto/auth-response.dto'
+
+import { UserRepository } from '@modules/users/repository/user.repository'
 import { Crypt } from '@protocols/crypt'
-import { User } from '@modules/users/entities/user.entity'
 
 @Injectable()
 export class SignInUseCase {
   constructor(
-    private readonly getUser: GetUserUseCase,
+    private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly cryptService: Crypt
@@ -22,7 +20,7 @@ export class SignInUseCase {
   async handle(signIn: SignInDto): Promise<AuthResponseDto> {
     const { email, password } = signIn
 
-    const userExists = (await this.getUser.handle(email)) as User
+    const userExists = await this.userRepository.findByEmail(email)
 
     if (
       !userExists ||

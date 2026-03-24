@@ -6,8 +6,6 @@ import { ForgotPasswordUseCase } from './use-cases/forgot-password.usecase'
 
 import { AuthController } from './auth.controller'
 
-import { UsersModule } from '@modules/users/users.module'
-
 import { Crypt } from '@protocols/crypt'
 import { CryptService } from '@infra/utils/CryptService'
 
@@ -17,7 +15,7 @@ import { PrismaService } from '@infra/database/prisma/prisma.service'
 import { ResetPasswordUseCase } from './use-cases/reset-password.usecase'
 
 @Module({
-  imports: [UsersModule],
+  imports: [],
   controllers: [AuthController],
   providers: [
     PrismaService,

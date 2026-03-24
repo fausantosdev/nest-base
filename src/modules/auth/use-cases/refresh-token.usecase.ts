@@ -2,15 +2,14 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 
-import { GetUserUseCase } from '@modules/users/use-cases/get-user.usecase'
-
 import { AuthResponseDto } from '../dto/auth-response.dto'
-import { User } from '@modules/users/entities/user.entity'
+
+import { UserRepository } from '@modules/users/repository/user.repository'
 
 @Injectable()
 export class RefreshTokenUseCase {
   constructor(
-    private readonly getUser: GetUserUseCase,
+    private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
   ) {}
@@ -20,7 +19,7 @@ export class RefreshTokenUseCase {
 
     const { sub } = decodedToken as { sub: string; email: string }
 
-    const user = (await this.getUser.handle(sub)) as User
+    const user = await this.userRepository.findById(sub)
 
     if (!user) throw new UnauthorizedException()
 
