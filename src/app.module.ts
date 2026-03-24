@@ -7,6 +7,7 @@ import { AuthModule } from '@modules/auth/auth.module'
 import { validate } from './config/env.validation'
 import { JwtModule } from '@nestjs/jwt'
 import { APP_FILTER } from '@nestjs/core'
+import { ThrottlerModule } from '@nestjs/throttler'
 
 @Module({
   imports: [
@@ -25,6 +26,14 @@ import { APP_FILTER } from '@nestjs/core'
         },
       }),
       inject: [ConfigService],
+    }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 30000, // 30 seconds
+          limit: 5, // 5 requests
+        },
+      ],
     }),
     UsersModule,
     AuthModule,

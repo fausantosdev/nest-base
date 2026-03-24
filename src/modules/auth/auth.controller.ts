@@ -17,7 +17,9 @@ import {
   ApiResetPassword,
   ApiSignIn,
 } from './auth.swagger'
+import { ThrottlerGuard } from '@nestjs/throttler'
 
+@UseGuards(ThrottlerGuard)
 @Controller('auth')
 export class AuthController {
   constructor(
