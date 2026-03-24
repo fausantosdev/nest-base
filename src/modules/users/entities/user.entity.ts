@@ -1,12 +1,12 @@
 export class User {
-  id: string
+  id: string | number
   name: string
-  date_of_birth: Date | string
+  date_of_birth: Date
   email: string
   password_hash: string
-  role: string
-  password_reset_token: string
-  password_reset_expires: Date | string
-  created_at: Date | string
-  updated_at: Date | string
+  role: 'user' | 'admin'
+  password_reset_token: string | null
+  password_reset_expires: Date | null
+  created_at: Date
+  updated_at: Date
 }

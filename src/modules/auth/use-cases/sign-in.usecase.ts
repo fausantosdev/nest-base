@@ -22,7 +22,7 @@ export class SignInUseCase {
   async handle(signIn: SignInDto): Promise<AuthResponseDto> {
     const { email, password } = signIn
 
-    const userExists = (await this.getUser.handle({ email })) as User
+    const userExists = (await this.getUser.handle(email)) as User
 
     if (
       !userExists ||

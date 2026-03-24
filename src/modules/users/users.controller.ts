@@ -57,7 +57,7 @@ export class UsersController {
   async profile(@Request() request: Express.Request) {
     const { sub } = request.user
 
-    const result = await this.getUser.handle({ id: sub })
+    const result = await this.getUser.handle(sub)
 
     return response({
       data: result,
@@ -79,7 +79,7 @@ export class UsersController {
   @Get(':id')
   @UseGuards(AuthGuard)
   async findOne(@Param('id') id: string) {
-    const result = await this.getUser.handle({ id })
+    const result = await this.getUser.handle(id)
 
     return response({
       data: result,

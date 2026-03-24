@@ -20,7 +20,7 @@ export class RefreshTokenUseCase {
 
     const { sub } = decodedToken as { sub: string; email: string }
 
-    const user = (await this.getUser.handle({ id: sub })) as User
+    const user = (await this.getUser.handle(sub)) as User
 
     if (!user) throw new UnauthorizedException()
 

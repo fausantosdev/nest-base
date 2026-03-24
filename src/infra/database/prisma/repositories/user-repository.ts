@@ -6,6 +6,7 @@ import { PrismaService } from '../prisma.service'
 
 import { UserRepository as Repository } from '@modules/users/repository/user.repository'
 import { User } from '@modules/users/entities/user.entity'
+import { UpdateUserDto } from '@modules/users/dto/update-user.dto'
 
 @Injectable()
 export class UserRepository implements Repository {
@@ -16,7 +17,7 @@ export class UserRepository implements Repository {
     email,
     date_of_birth,
     password_hash,
-  }: Prisma.UserCreateInput): Promise<User> {
+  }: User): Promise<User> {
     return await this.prisma.user.create({
       data: {
         name,
@@ -27,29 +28,32 @@ export class UserRepository implements Repository {
     })
   }
 
-  public async read(where: Prisma.UserWhereInput): Promise<User[]> {
-    return await this.prisma.user.findMany({ where })
-  }
-
-  public async findOne(
-    where: Prisma.UserWhereUniqueInput
-  ): Promise<User | null> {
-    return await this.prisma.user.findUnique({ where })
-  }
-
-  public async update(
-    where: Prisma.UserWhereUniqueInput,
-    data: object
-  ): Promise<User> {
-    return this.prisma.user.update({
-      where,
-      data,
+  public async read(where: Partial<User>): Promise<User[]> {
+    return await this.prisma.user.findMany({
+      where: where as Prisma.UserWhereInput,
     })
   }
 
-  public async delete(
-    where: Prisma.UserWhereUniqueInput
-  ): Promise<User | null> {
-    return await this.prisma.user.delete({ where })
+  public async findById(id: string): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: { id },
+    })
+  }
+
+  public async findByEmail(email: string): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: { email },
+    })
+  }
+
+  public async update(id: string | number, data: UpdateUserDto): Promise<User> {
+    return this.prisma.user.update({
+      where: { id: String(id) },
+      data: data as Prisma.UserUpdateInput,
+    })
+  }
+
+  public async delete(id: string): Promise<User | null> {
+    return await this.prisma.user.delete({ where: { id } })
   }
 }

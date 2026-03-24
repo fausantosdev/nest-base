@@ -6,8 +6,8 @@ import { UserRepository } from '../repository/user.repository'
 export class GetUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async handle(where: { id?: string; email?: string }) {
-    const user = await this.userRepository.findOne(where)
+  async handle(email: string) {
+    const user = await this.userRepository.findByEmail(email)
 
     return user
   }

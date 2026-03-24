@@ -12,11 +12,11 @@ export class UpdateUserUseCase {
       throw new BadRequestException('No data provided for update')
     }
 
-    const user = await this.userRepository.findOne({ id })
+    const user = await this.userRepository.findById(id)
 
     if (!user) throw new BadRequestException('User not found')
 
-    const updated = await this.userRepository.update({ id }, data)
+    const updated = await this.userRepository.update(id, data)
 
     return updated
   }

@@ -19,7 +19,7 @@ export class ResetPasswordUseCase {
     email: string
     newPassword: string
   }): Promise<boolean> {
-    const user = await this.userRepository.findOne({ email })
+    const user = await this.userRepository.findByEmail(email)
 
     if (!user) throw new UnauthorizedException('Email not found')
 
@@ -33,19 +33,14 @@ export class ResetPasswordUseCase {
 
     const newPasswordHash = await this.crypt.hash(newPassword)
 
-    const updated = await this.userRepository.update(
-      { id: user.id },
-      {
-        password_hash: newPasswordHash,
-        password_reset_token: null,
-        password_reset_expires: null,
-      }
-    )
+    const updated = await this.userRepository.update(user.id, {
+      password_hash: newPasswordHash,
+      password_reset_token: null,
+      password_reset_expires: null,
+    })
 
     if (!updated)
       throw new UnauthorizedException('Failed to generate reset token')
-
-    // Aqui o email é enviado para um microserviço de email, que é responsável por enviar o email para o usuário com o token de reset de senha
 
     return !!updated
   }
