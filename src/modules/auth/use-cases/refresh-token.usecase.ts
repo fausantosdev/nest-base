@@ -26,6 +26,7 @@ export class RefreshTokenUseCase {
     const payload = {
       sub: user.id,
       email: user.email,
+      role: user.role,
     }
 
     const newToken = await this.jwtService.signAsync(payload)

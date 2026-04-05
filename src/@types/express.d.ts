@@ -4,6 +4,7 @@ declare global {
       user?: {
         sub: string
         email: string
+        role: string
       }
     }
   }

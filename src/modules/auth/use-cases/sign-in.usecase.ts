@@ -31,6 +31,7 @@ export class SignInUseCase {
     const payload = {
       sub: userExists.id,
       email: userExists.email,
+      role: userExists.role,
     }
 
     const token = await this.jwtService.signAsync(payload)
