@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  Put,
-  Request,
-} from '@nestjs/common'
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common'
 
 import { response } from '@common/helpers/response-helper'
 
@@ -31,6 +22,11 @@ import {
 
 import { Auth } from '@common/decorators/auth.decorator'
 import { Role } from '@config/roles'
+import {
+  CurrentUser,
+  CurrentUserType,
+} from '@common/decorators/current-user.decorator'
+
 @Controller('/users')
 export class UsersController {
   constructor(
@@ -54,10 +50,8 @@ export class UsersController {
   @ApiProfileUser()
   @Get('me')
   @Auth()
-  async profile(@Request() request: Express.Request) {
-    const { sub } = request.user
-
-    const result = await this.getUser.handle(sub)
+  async profile(@CurrentUser() user: CurrentUserType) {
+    const result = await this.getUser.handle(user.sub)
 
     return response({
       data: result,
@@ -87,10 +81,13 @@ export class UsersController {
   }
 
   @ApiUpdateUser()
-  @Put(':id')
+  @Put()
   @Auth()
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const result = await this.updateUser.handle(id, updateUserDto)
+  async update(
+    @CurrentUser() user: CurrentUserType,
+    @Body() updateUserDto: UpdateUserDto
+  ) {
+    const result = await this.updateUser.handle(user.sub, updateUserDto)
 
     return response({
       data: result,
@@ -98,10 +95,10 @@ export class UsersController {
   }
 
   @ApiDeleteUser()
-  @Delete(':id')
+  @Delete()
   @Auth()
-  async remove(@Param('id') id: string) {
-    const result = await this.deleteUser.handle(id)
+  async remove(@CurrentUser() user: CurrentUserType) {
+    const result = await this.deleteUser.handle(user.sub)
 
     return response({
       data: result,
