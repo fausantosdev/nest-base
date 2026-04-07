@@ -5,13 +5,11 @@ import {
   Body,
   Param,
   Delete,
-  UseGuards,
   Put,
   Request,
 } from '@nestjs/common'
 
 import { response } from '@common/helpers/response-helper'
-import { AuthGuard } from '@guards/auth.guard'
 
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
@@ -31,6 +29,8 @@ import {
   ApiUpdateUser,
 } from './user.swagger'
 
+import { Auth } from '@common/decorators/auth.decorator'
+import { Role } from '@config/roles'
 @Controller('/users')
 export class UsersController {
   constructor(
@@ -53,7 +53,7 @@ export class UsersController {
 
   @ApiProfileUser()
   @Get('me')
-  @UseGuards(AuthGuard)
+  @Auth()
   async profile(@Request() request: Express.Request) {
     const { sub } = request.user
 
@@ -66,7 +66,7 @@ export class UsersController {
 
   @ApiGetUsers()
   @Get()
-  @UseGuards(AuthGuard)
+  @Auth(Role.ADMIN)
   async findAll() {
     const result = await this.getUsers.handle()
 
@@ -77,7 +77,7 @@ export class UsersController {
 
   @ApiGetUser()
   @Get(':id')
-  @UseGuards(AuthGuard)
+  @Auth(Role.ADMIN)
   async findOne(@Param('id') id: string) {
     const result = await this.getUser.handle(id)
 
@@ -88,7 +88,7 @@ export class UsersController {
 
   @ApiUpdateUser()
   @Put(':id')
-  @UseGuards(AuthGuard)
+  @Auth()
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const result = await this.updateUser.handle(id, updateUserDto)
 
@@ -99,7 +99,7 @@ export class UsersController {
 
   @ApiDeleteUser()
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @Auth()
   async remove(@Param('id') id: string) {
     const result = await this.deleteUser.handle(id)
 
