@@ -1,5 +1,12 @@
 import { plainToInstance } from 'class-transformer'
-import { IsEnum, IsNumber, IsString, validateSync } from 'class-validator'
+import {
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsNumber,
+  IsString,
+  validateSync,
+} from 'class-validator'
 
 enum Environment {
   Development = 'development',
@@ -28,6 +35,24 @@ class EnvironmentVariables {
 
   @IsNumber()
   BCRYPT_SALT: number = 10
+
+  @IsString()
+  MAIL_HOST: string
+
+  @IsNumber()
+  MAIL_PORT: number
+
+  @IsBoolean()
+  MAIL_SECURE: boolean
+
+  @IsString()
+  MAIL_USER: string
+
+  @IsString()
+  MAIL_PASS: string
+
+  @IsEmail()
+  MAIL_ADMIN: string
 }
 
 function validate(config: Record<string, unknown>) {

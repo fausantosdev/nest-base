@@ -1,4 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common'
+import { MailerService } from '@nestjs-modules/mailer'
 
 import { UserRepository } from '../repository/user.repository'
 import { Crypt } from '@protocols/crypt'
@@ -9,7 +10,8 @@ import { User } from '../entities/user.entity'
 export class CreateUserUseCase {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly cryptService: Crypt
+    private readonly cryptService: Crypt,
+    private readonly mailerService: MailerService
   ) {}
 
   async handle(createUserDto: CreateUserDto): Promise<User> {
@@ -28,6 +30,14 @@ export class CreateUserUseCase {
     user.password_hash = await this.cryptService.hash(password_hash)
 
     const newUser = await this.userRepository.create(user)
+
+    if (newUser.id) {
+      await this.mailerService.sendMail({
+        to: `${newUser.name} ${newUser.email}`,
+        subject: 'Bem vindo!',
+        text: `Olá ${newUser.name}!\nFicamos muito felizes em ver você por aqui. Sua conta está pronta para uso!`,
+      })
+    }
 
     return newUser
   }
