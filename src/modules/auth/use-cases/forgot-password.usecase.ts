@@ -1,4 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { MailerService } from '@nestjs-modules/mailer'
 
 import { UserRepository } from '@modules/users/repository/user.repository'
 import { Crypt } from '@protocols/crypt'
@@ -7,7 +8,8 @@ import { Crypt } from '@protocols/crypt'
 export class ForgotPasswordUseCase {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly crypt: Crypt
+    private readonly crypt: Crypt,
+    private readonly mailerService: MailerService
   ) {}
 
   async handle(email: string): Promise<boolean> {
@@ -28,7 +30,19 @@ export class ForgotPasswordUseCase {
     if (!updated)
       throw new UnauthorizedException('Failed to generate reset token')
 
-    // Aqui o email é enviado para um microserviço de email, que é responsável por enviar o email para o usuário com o token de reset de senha
+    await this.mailerService.sendMail({
+      to: updated.email,
+      subject: 'Recuperação de senha!',
+      text: `
+        Esqueceu sua senha?\n\n
+        Sem problemas! Use o código abaixo para validar a sua identidade e criar uma nova senha:\n\n
+        ${hash}\n\n
+        Este código expira em 30 minutos por motivos de segurança.\n\n
+        Se você não solicitou essa alteração, ignore este e-mail. Sua senha atual permanecerá segura.\n\n
+        Atenciosamente,\n\n
+        Segurança fausantosdev.
+      `,
+    })
 
     return !!updated
   }
