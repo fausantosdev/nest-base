@@ -10,8 +10,8 @@ import { DeleteUserUseCase } from './use-cases/delete-user.usecase'
 
 import { UsersController } from './users.controller'
 
-import { UserRepository as Repository } from '@modules/users/repository/user.repository'
-import { UserRepository } from '@infra/database/prisma/repositories/user-repository'
+import { UserRepository } from '@modules/users/repository/user.repository'
+import { PrismaUserRepository } from '@infra/database/prisma/repositories/prisma-user-repository'
 import { Crypt } from '@protocols/crypt'
 import { CryptService } from '@infra/utils/CryptService'
 
@@ -26,8 +26,8 @@ import { CryptService } from '@infra/utils/CryptService'
     UpdateUserUseCase,
     DeleteUserUseCase,
     {
-      provide: Repository,
-      useClass: UserRepository,
+      provide: UserRepository,
+      useClass: PrismaUserRepository,
     },
     {
       provide: Crypt,

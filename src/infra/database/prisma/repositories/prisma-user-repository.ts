@@ -4,12 +4,12 @@ import { Prisma } from '../generated/client'
 
 import { PrismaService } from '../prisma.service'
 
-import { UserRepository as Repository } from '@modules/users/repository/user.repository'
+import { UserRepository } from '@modules/users/repository/user.repository'
 import { User } from '@modules/users/entities/user.entity'
 import { UpdateUserDto } from '@modules/users/dto/update-user.dto'
 
 @Injectable()
-export class UserRepository implements Repository {
+export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   public async create({

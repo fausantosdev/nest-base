@@ -9,8 +9,8 @@ import { AuthController } from './auth.controller'
 import { Crypt } from '@protocols/crypt'
 import { CryptService } from '@infra/utils/CryptService'
 
-import { UserRepository as Repository } from '@modules/users/repository/user.repository'
-import { UserRepository } from '@infra/database/prisma/repositories/user-repository'
+import { UserRepository } from '@modules/users/repository/user.repository'
+import { PrismaUserRepository } from '@infra/database/prisma/repositories/prisma-user-repository'
 import { PrismaService } from '@infra/database/prisma/prisma.service'
 import { ResetPasswordUseCase } from './use-cases/reset-password.usecase'
 
@@ -28,8 +28,8 @@ import { ResetPasswordUseCase } from './use-cases/reset-password.usecase'
       useClass: CryptService,
     },
     {
-      provide: Repository,
-      useClass: UserRepository,
+      provide: UserRepository,
+      useClass: PrismaUserRepository,
     },
   ],
 })
