@@ -12,7 +12,10 @@ export class PrismaService
     const adapter = new PrismaPg({
       connectionString: process.env.DATABASE_URL,
     })
-    super({ adapter })
+    super({
+      adapter,
+      log: ['query', 'info', 'warn', 'error'],
+    })
   }
   async onModuleInit() {
     return await this.$connect()
