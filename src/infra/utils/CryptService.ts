@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config'
 
 import * as bcrypt from 'bcrypt'
 
-import { Crypt } from '@protocols/crypt'
+import { Crypt } from '@app/contracts/crypt'
 
 @Injectable()
 export class CryptService implements Crypt {

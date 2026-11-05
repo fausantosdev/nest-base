@@ -1,10 +1,17 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger'
-import { ResponseDto } from '@common/helpers/response-helper'
+import { ResponseDto } from '@infra/common/helpers/response-helper'
 
 export function ApiSignIn() {
   return applyDecorators(
     ApiOperation({ summary: 'Authenticate user' }),
+    ApiResponse({ type: ResponseDto })
+  )
+}
+
+export function ApiSignUp() {
+  return applyDecorators(
+    ApiOperation({ summary: 'Register new user' }),
     ApiResponse({ type: ResponseDto })
   )
 }

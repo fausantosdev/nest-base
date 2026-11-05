@@ -2,9 +2,16 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 
-import { AuthResponseDto } from '../dto/auth-response.dto'
+import { UserRepository } from '@domain/repositories/user.repository'
 
-import { UserRepository } from '@modules/users/repository/user.repository'
+type RefreshTokenInput = {
+  token: string
+}
+
+type RefreshTokenOutput = {
+  token: string
+  expires_in: string | number
+}
 
 @Injectable()
 export class RefreshTokenUseCase {
@@ -14,7 +21,7 @@ export class RefreshTokenUseCase {
     private readonly configService: ConfigService
   ) {}
 
-  async handle(token: string): Promise<AuthResponseDto> {
+  async handle({ token }: RefreshTokenInput): Promise<RefreshTokenOutput> {
     const decodedToken = await this.jwtService.decode(token)
 
     const { sub } = decodedToken as { sub: string; email: string }

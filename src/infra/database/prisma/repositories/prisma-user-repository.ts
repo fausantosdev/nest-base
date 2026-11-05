@@ -4,9 +4,8 @@ import { Prisma } from '../generated/client'
 
 import { PrismaService } from '../prisma.service'
 
-import { UserRepository } from '@modules/users/repository/user.repository'
-import { User } from '@modules/users/entities/user.entity'
-import { UpdateUserDto } from '@modules/users/dto/update-user.dto'
+import { UserRepository } from '@domain/repositories/user.repository'
+import { User } from '@domain/entities/user.entity'
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -46,7 +45,10 @@ export class PrismaUserRepository implements UserRepository {
     })
   }
 
-  public async update(id: string | number, data: UpdateUserDto): Promise<User> {
+  public async update(
+    id: string | number,
+    data: Omit<User, 'id' | 'created_at' | 'updated_at'>
+  ): Promise<User> {
     return this.prisma.user.update({
       where: { id: String(id) },
       data: data as Prisma.UserUpdateInput,

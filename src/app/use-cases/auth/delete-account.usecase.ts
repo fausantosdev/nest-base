@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 
-import { UserRepository } from '../repository/user.repository'
-import { User } from '../entities/user.entity'
+import { User } from '@domain/entities/user.entity'
+import { UserRepository } from '@domain/repositories/user.repository'
 
 @Injectable()
 export class DeleteUserUseCase {

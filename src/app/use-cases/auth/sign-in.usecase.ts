@@ -2,11 +2,19 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 
-import { SignInDto } from '../dto/sign-in.dto'
-import { AuthResponseDto } from '../dto/auth-response.dto'
+import { UserRepository } from '@domain/repositories/user.repository'
 
-import { UserRepository } from '@modules/users/repository/user.repository'
-import { Crypt } from '@protocols/crypt'
+import { Crypt } from '../../contracts/crypt'
+
+type SignInInput = {
+  email: string
+  password: string
+}
+
+type SignInOutput = {
+  token: string
+  expires_in: string | number
+}
 
 @Injectable()
 export class SignInUseCase {
@@ -17,7 +25,7 @@ export class SignInUseCase {
     private readonly cryptService: Crypt
   ) {}
 
-  async handle(signIn: SignInDto): Promise<AuthResponseDto> {
+  async handle(signIn: SignInInput): Promise<SignInOutput> {
     const { email, password } = signIn
 
     const userExists = await this.userRepository.findByEmail(email)
