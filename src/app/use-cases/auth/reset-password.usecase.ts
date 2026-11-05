@@ -1,7 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 
-import { UserRepository } from '@modules/users/repository/user.repository'
-import { Crypt } from '@protocols/crypt'
+import { UserRepository } from '@domain/repositories/user.repository'
+
+import { Crypt } from '../../contracts/crypt'
+
+type ResetPasswordInput = {
+  token: string
+  email: string
+  newPassword: string
+}
+
+type ResetPasswordOutput = boolean
 
 @Injectable()
 export class ResetPasswordUseCase {
@@ -14,11 +23,7 @@ export class ResetPasswordUseCase {
     token,
     email,
     newPassword,
-  }: {
-    token: string
-    email: string
-    newPassword: string
-  }): Promise<boolean> {
+  }: ResetPasswordInput): Promise<ResetPasswordOutput> {
     const user = await this.userRepository.findByEmail(email)
 
     if (!user) throw new UnauthorizedException('Email not found')

@@ -1,21 +1,30 @@
 import { HttpException, Injectable } from '@nestjs/common'
 import { MailerService } from '@nestjs-modules/mailer'
 
-import { UserRepository } from '../repository/user.repository'
-import { Crypt } from '@protocols/crypt'
-import { CreateUserDto } from '../dto/create-user.dto'
-import { User } from '../entities/user.entity'
+import { UserRepository } from '@domain/repositories/user.repository'
+import { User } from '@domain/entities/user.entity'
+
+import { Crypt } from '../../contracts/crypt'
+
+type SignUpInput = {
+  name: string
+  date_of_birth: Date
+  email: string
+  password_hash: string
+}
+
+type SignUpOutput = boolean
 
 @Injectable()
-export class CreateUserUseCase {
+export class SignUpUseCase {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly cryptService: Crypt,
     private readonly mailerService: MailerService
   ) {}
 
-  async handle(createUserDto: CreateUserDto): Promise<User> {
-    const { name, date_of_birth, email, password_hash } = createUserDto
+  async handle(signUpInput: SignUpInput): Promise<SignUpOutput> {
+    const { name, date_of_birth, email, password_hash } = signUpInput
 
     const emailAlreadyExists = await this.userRepository.findByEmail(email)
 
@@ -39,6 +48,6 @@ export class CreateUserUseCase {
       })
     }
 
-    return newUser
+    return !!newUser
   }
 }

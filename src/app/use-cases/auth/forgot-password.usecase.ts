@@ -1,18 +1,25 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { MailerService } from '@nestjs-modules/mailer'
 
-import { UserRepository } from '@modules/users/repository/user.repository'
-import { Crypt } from '@protocols/crypt'
+import { UserRepository } from '@domain/repositories/user.repository'
+
+import { Crypt } from '../../contracts/crypt'
+import { Email } from '../../contracts/email'
+
+type ForgotPasswordInput = {
+  email: string
+}
+
+type ForgotPasswordOutput = boolean
 
 @Injectable()
 export class ForgotPasswordUseCase {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly crypt: Crypt,
-    private readonly mailerService: MailerService
+    private readonly emailService: Email
   ) {}
 
-  async handle(email: string): Promise<boolean> {
+  async handle({ email }: ForgotPasswordInput): Promise<ForgotPasswordOutput> {
     const user = await this.userRepository.findByEmail(email)
 
     if (!user) throw new UnauthorizedException('Email not found')
@@ -30,8 +37,9 @@ export class ForgotPasswordUseCase {
     if (!updated)
       throw new UnauthorizedException('Failed to generate reset token')
 
-    await this.mailerService.sendMail({
+    await this.emailService.send({
       to: updated.email,
+      from: 'noreply@yourapp.com',
       subject: 'Recuperação de senha!',
       text: `
         Esqueceu sua senha?\n\n
