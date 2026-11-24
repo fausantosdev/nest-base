@@ -4,8 +4,8 @@ import { Prisma } from '../generated/client'
 
 import { PrismaService } from '../prisma.service'
 
-import { UserRepository } from '@domain/repositories/user.repository'
-import { User } from '@domain/entities/user.entity'
+import { UserRepository } from '@modules/users/repository/user.repository'
+import { User } from '@modules/users/entities/user.entity'
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {

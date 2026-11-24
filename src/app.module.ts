@@ -6,7 +6,8 @@ import { ThrottlerModule } from '@nestjs/throttler'
 import { MailerModule } from '@nestjs-modules/mailer'
 import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup'
 
-import { AuthModule } from '@infra/modules/auth/auth.module'
+import { AuthModule } from '@modules/auth/auth.module'
+import { UsersModule } from '@modules/users/users.module'
 
 import { validate } from './config/env.validation'
 
@@ -55,6 +56,7 @@ import { validate } from './config/env.validation'
       }),
     }),
     AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [
