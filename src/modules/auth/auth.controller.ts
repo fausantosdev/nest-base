@@ -7,7 +7,6 @@ import { ForgotPasswordUseCase } from './use-cases/forgot-password.usecase'
 import { ResetPasswordUseCase } from './use-cases/reset-password.usecase'
 
 import { response } from '@common/helpers/response-helper'
-import { AuthGuard } from '@common/guards/auth.guard'
 import { SignInDto } from './dto/sign-in.dto'
 import { ForgotPasswordDto } from './dto/forgot-password.dto'
 import { ResetPasswordDto } from './dto/reset-password.dto'
@@ -70,7 +69,6 @@ export class AuthController {
   }
 
   @ApiProfileUser()
-  @UseGuards(AuthGuard)
   @Get('me')
   async profile(@CurrentUser() user: CurrentUserType) {
     const result = await this.getCurrentUser.handle({ id: user.sub })
@@ -81,7 +79,6 @@ export class AuthController {
   }
 
   @ApiRefreshToken()
-  @UseGuards(AuthGuard)
   @Post('refresh-token')
   async refreshToken(@Request() request: any) {
     const [, token] = request.headers.authorization.split(' ')

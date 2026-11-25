@@ -22,9 +22,13 @@ import {
   ApiUpdateUser,
 } from './user.swagger'
 
+import { Access } from '@common/decorators/access.decorator'
+import { Role } from '@config/roles'
+
 import { response } from '@common/helpers/response-helper'
 
 @Controller('/users')
+@Access({ role: Role.ADMIN })
 export class UsersController {
   constructor(
     private readonly createUser: CreateUserUseCase,
